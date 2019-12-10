@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Foreman Admin</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<style type="text/css">
+		body { 
+			background: #130f40 !important;
+			color: white !important;
+		} 
+		hr {
+			margin-top: 1rem;
+			margin-bottom: 1rem;
+			border: 0;
+			border-top: 1px solid rgba(255, 255, 255, 0.1);
+		}
+	</style>
+</head>
+<body onload="doInitialLoad()">
+  
+<div class="container">
+	<nav class="navbar navbar-expand-lg navbar-dark">
+		<a class="navbar-brand" href="#">Foreman Admin</a>
+	</nav>
+	<hr>
+	<div class="row">
+		<div class="col-sm-4">
+			<h3>Superusers</h3>
+			<div class="form-group">
+				<label for="inputNewSuperuserUsername">Username</label>
+				<input type="text" class="form-control" id="inputNewSuperuserUsername" placeholder="notroot">
+			</div>
+			<div class="form-group">
+				<label for="inputNewSuperuserPassword">Password</label>
+				<input type="password" class="form-control" id="inputNewSuperuserPassword" placeholder="Password">
+			</div>
+			<label class="checkbox">
+				<input type="checkbox" name="confirmNewSuperuser" id="confirmNewSuperuser" onchange="allowNoAuthChanged()" />
+				<span>Confirm Adding Superuser</span>
+			</label>
+			<br>
+			<button type="submit" class="btn btn-primary" onclick="askToAddNewUser()">Add Superuser</button>
+			<br>
+			<br>
+			<table class="table table-bordered table-dark">
+				<tbody id="superusersTable">
+				</tbody>
+			</table>
+			<!--<button class="btn btn-danger" onclick="askToRemoveSuperuser()">Remove</button>-->
+		</div>
+		<div class="col-sm-4">
+			<h3>API Keys</h3>
+			<table class="table table-bordered table-dark" id='apiKeyTable'>
+				<tbody id="authorizedKeysCol">
+				
+				</tbody>
+			</table>
+			<button class="btn btn-primary" onclick="askForNewKey()">Generate</button> 
+			<button class="btn btn-danger" onclick="askToRemoveKey()">Remove Key</button>
+		</div>
+		<div class="col-sm-4">
+			<h3>Keystore Stats</h3>
+			<table class="table table-bordered table-dark">
+				<tbody id="keystoreInformation">
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+	var authorizedKeysTable = document.getElementById('authorizedKeysCol');
+	var keystoreInformationTable = document.getElementById('keystoreInformation');
+	var superusersTable = document.getElementById('superusersTable');
+	var selectedAPIKey = '';
+	var lastSelectedAPIKeyRow = null;
+
+	function buf2hex(buffer) { // buffer is an ArrayBuffer
+		return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+	}
+
+	async function digestMessage(message) {
+		const encoder = new TextEncoder();
+		const data = encoder.encode(message);
+		const hash = await crypto.subtle.digest('SHA-256', data);
+		return buf2hex(hash);
+	}
+
+	function doInitialLoad() {
+		refreshKeys();
+		refreshKeystoreInfo();
+		refreshSuperusers();
+	}
+
+	function deselectAllAPIKeyRows() {
+		var allRows = authorizedKeysTable.getElementsByTagName('tr');
+		for (var i = allRows.length - 1; i >= 0; i--) {
+			if (allRows[i].classList.contains('bg-primary')) {
+				allRows[i].classList.remove('bg-primary');
+			}
+		}
+	}
+
+	function handleTableRowClick(trObj) {
+		if (lastSelectedAPIKeyRow != null) {
+			if (lastSelectedAPIKeyRow.classList.contains('bg-primary')) {
+				lastSelectedAPIKeyRow.classList.remove('bg-primary');
+			}
+		}
+		selectedAPIKey = trObj.srcElement.lastChild.textContent;
+		if (trObj.srcElement.classList.contains('bg-primary')) {
+			trObj.srcElement.classList.remove('bg-primary');
+		} else {
+			trObj.srcElement.classList.add('bg-primary');
+		}
+		lastSelectedAPIKeyRow = trObj.srcElement;
+		console.log(selectedAPIKey);
+	}
+
+	function createKeystoreTableRow(tableRowHeader, tableRowContent) {
+		var newTableRow = document.createElement('tr');
+		var newTableRowHeader = document.createElement('th');
+		newTableRowHeader.scope = "row";
+		newTableRowHeader.innerHTML = tableRowHeader;
+		newTableRow.appendChild(newTableRowHeader);
+		var newLabel = document.createElement('td');
+		newLabel.innerHTML = tableRowContent;
+		newTableRow.appendChild(newLabel);
+		return newTableRow;
+	}
+
+	function refreshKeystoreInfo() {
+		while (keystoreInformationTable.firstChild) {
+			keystoreInformationTable.removeChild(keystoreInformationTable.firstChild);
+		}
+		$.get("/api/find/all", function(data) {
+			console.log(data);
+			keystoreInformationTable.appendChild(createKeystoreTableRow('# of keysets', data.length));
+			var foundDevices = [];
+			for (var i = data.length - 1; i >= 0; i--) {
+				if (!foundDevices.includes(data[i]['device'])) {
+					foundDevices.push(data[i]['device']);
+				}
+			}
+			keystoreInformationTable.appendChild(createKeystoreTableRow('# of devices', foundDevices.length));
+		});
+	}
+
+	function refreshSuperusers() {
+		while (superusersTable.firstChild) {
+			superusersTable.removeChild(superusersTable.firstChild);
+		}
+		$.get("/admin/superuser/users", function(data) {
+			console.log('refreshSuperusers => '+JSON.stringify(data));
+			for (var i = data.length - 1; i >= 0; i--) {
+				let username = data[i]['user'];
+				let hash = data[i]['hash'];
+				superusersTable.appendChild(createKeystoreTableRow(username, hash));
+			}
+		});
+	}
+
+	function refreshKeys() {
+		while (authorizedKeysTable.firstChild) {
+			authorizedKeysTable.removeChild(authorizedKeysTable.firstChild);
+		}
+		$.get("/admin/apikeys", function(data) {
+			console.log(data);
+			for (var i = data.length - 1; i >= 0; i--) {
+				var newTableRow = document.createElement('tr');
+				newTableRow.className += "clickable-row"
+				newTableRow.onclick = handleTableRowClick;
+				var newLabel = document.createElement('td');
+				newLabel.innerHTML = data[i]['key'];
+				newTableRow.appendChild(newLabel);
+				authorizedKeysTable.appendChild(newTableRow);
+			}
+		});
+	}
+
+	async function askToAddNewUser() {
+		if (document.getElementById('confirmNewSuperuser').value == 'on') {
+			var newUsername = document.getElementById('inputNewSuperuserUsername').value;
+			var newPassword = document.getElementById('inputNewSuperuserPassword').value; 
+			const digest = await digestMessage(newPassword);
+			$.post("/admin/superuser/add",
+			{
+				username: newUsername,
+				hash: digest
+			}, function(data, status){
+				alert("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+			});
+		}
+	}
+
+	function askForNewKey() {
+		$.get("/admin/newkey", function(data) {
+			alert('Added new key. '+data);
+			setTimeout(function() {
+				refreshKeys();
+			}, 1500);
+		});
+	}
+	function askToRemoveKey() {
+		if (selectedAPIKey.length > 0) {
+			$.get("/admin/delete/"+selectedAPIKey, function(data) {
+				console.log(data)
+				refreshKeys();
+				alert('Removed key');
+			});
+		} else {
+			var keyPrompt = prompt("Please enter the API Key you'd like to remove", "Harry Potter");
+			if (keyPrompt != null || keyPrompt != "") {
+				$.get("/admin/delete/"+keyPrompt, function(data) {
+					console.log(data)
+					refreshKeys();
+					alert('Removed key');
+				});
+			} 
+		}
+	}
+</script>
+</html>

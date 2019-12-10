@@ -1,0 +1,6 @@
+.env
+node_modules/
+.DS_Store
+switch_to_development.sh
+switch_to_production.sh
+package-lock.json

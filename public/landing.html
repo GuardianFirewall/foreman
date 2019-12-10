@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Foreman Keystore</title>
+	<meta name="robots" content="noindex" />
+	<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap" rel="stylesheet">
+	<style type="text/css">
+		body {
+			color: white;
+			font-family: 'Nanum Gothic', sans-serif;
+			margin: 0px;
+			padding: 0px;
+			text-align: center;
+			background-color: #130f40;
+		}
+		hr {
+			border: 0;
+			height: 1px;
+			background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0));
+		}
+		.titleContainer {
+			width: 100%;
+			height: 435px;
+			margin: 0px;
+			padding: 0px;
+		}
+		.title {
+			margin: 2px;
+			font-size: 60px;
+			font-weight: bold;
+		}
+		.subtitle {
+			margin-top: 5px;
+			margin-bottom: 15px;
+			font-size: 20px;
+			font-weight: bold;
+			font-style: italic;
+		}
+		.stats {
+			margin-top: 5px;
+			margin-bottom: 15px;
+			font-size: 15px;
+		}
+		.logo {
+			margin-top: 20px;
+			margin-bottom: 5px;
+		}
+		.keycell {
+			max-width: 100%;
+			min-height: 240px;
+			background-color: #30336b;
+			box-sizing: border-box;
+			margin: 10px;
+			padding: 10px;
+			border-radius: 5px;
+			display: inline-block;
+		}
+		.keycell p {
+			margin-top: 5px;
+			margin-bottom: 0px;
+		}
+		.keycell p code {
+			font-size: 12px;
+			background-color: black;
+			border-radius: 7px;
+			padding-left: 5px;
+			padding-right: 5px;
+			padding-top: 1px;
+			padding-bottom: 1px;
+			margin: 0;
+		}
+		.keycell a:link, a:visited {
+			color: white;
+			background-color: #f44336;
+			padding: 4px 20px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			margin-left: 20px;
+		}
+		.keycell a:hover, a:active {
+			background-color: red;
+		}
+		.keycellImageKey {
+			margin-top: 5px;
+		}
+		.availableKeys {
+			width: 100%;
+			height: 100%;
+		} 
+		.devicecontainer {
+			display: none;
+  			overflow: hidden;
+			width: 100%;
+			min-height: 280px;
+			margin: 0px;
+			padding: 0px;
+		}
+		.collapsible {
+			background-color: #30336b;
+			color: white;
+			cursor: pointer;
+			padding: 18px;
+			width: 100%;
+			border: none;
+			text-align: left;
+			outline: none;
+			font-size: 20px;
+			margin-top: 10px;
+		}
+		.active, .collapsible:hover {
+			background-color: #686de0;
+		}
+		.content {
+			padding: 0 18px;
+			display: none;
+			overflow: hidden;
+			background-color: #f1f1f1;
+		}
+		.loadingKeys {
+			font-size: 60px;
+			margin-top: 65px;
+		}
+	</style>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+</head>
+<body onload="loadData()">
+<div class="titleContainer">
+	<svg version="1.0" xmlns="http://www.w3.org/2000/svg" class="logo" width="302px" height="264px" viewBox="0 0 402.000000 364.000000" preserveAspectRatio="xMidYMid meet">
+	<g transform="translate(0.000000,364.000000) scale(0.100000,-0.100000)" fill="#ffffff" stroke="none">
+	<path d="M1910 3629 c-32 -13 -77 -56 -98 -94 -15 -27 -17 -100 -20 -727 l-3
+	-698 -24 0 -25 0 0 -139 0 -138 -99 -6 c-101 -5 -128 -13 -169 -51 -42 -38
+	-55 -76 -60 -178 l-5 -98 -138 0 -139 0 0 -30 c0 -22 -5 -30 -18 -30 -26 0
+	-256 64 -316 88 l-50 19 86 40 c271 127 528 384 657 656 144 305 177 640 94
+	962 -14 55 -28 109 -30 121 -4 19 2 22 59 34 34 7 66 16 70 19 3 3 1 32 -5 64
+	-12 67 -11 67 -127 37 -203 -52 -448 -166 -619 -288 -112 -79 -287 -244 -373
+	-351 -216 -268 -361 -593 -422 -946 -12 -69 -27 -265 -25 -330 2 -59 -2 -77
+	-24 -115 -40 -70 -76 -188 -83 -276 -12 -147 31 -309 118 -444 62 -97 226
+	-255 344 -333 281 -186 635 -307 1089 -374 173 -25 737 -25 910 0 454 67 808
+	188 1089 374 118 78 282 236 344 333 87 135 130 297 118 444 -7 88 -43 206
+	-83 276 -22 38 -26 56 -24 115 3 102 -16 283 -44 417 -126 615 -518 1118
+	-1075 1382 -169 79 -322 124 -552 161 -27 4 -42 14 -57 38 -33 53 -86 77 -172
+	76 -41 0 -85 -5 -99 -10z m160 -141 c20 -21 20 -31 20 -700 l0 -678 -85 0 -85
+	0 0 671 c0 672 1 700 34 721 6 4 30 8 53 8 31 0 48 -6 63 -22z m300 -119 c55
+	-12 100 -26 100 -30 0 -5 -11 -47 -25 -94 -93 -323 -65 -681 80 -991 69 -149
+	147 -257 279 -390 130 -129 240 -209 380 -275 l81 -38 19 -61 c11 -34 23 -63
+	27 -66 12 -7 166 63 252 114 44 26 108 73 143 105 35 32 64 53 64 45 0 -33
+	-53 -120 -109 -181 -127 -135 -350 -246 -652 -322 -136 -35 -129 -37 -129 43
+	l0 69 147 36 c80 20 148 39 151 41 5 6 -15 96 -26 113 -5 8 -44 2 -137 -22
+	l-130 -34 -3 35 -3 34 -140 0 -139 0 0 78 c0 93 -12 141 -47 182 -40 48 -76
+	62 -184 67 l-99 6 0 138 0 139 -25 0 -25 0 0 640 0 640 25 0 c13 0 69 -10 125
+	-21z m-931 -134 c43 -137 55 -225 55 -380 0 -166 -14 -256 -65 -410 -121 -365
+	-437 -680 -797 -796 l-70 -22 -69 46 c-81 54 -165 135 -199 192 l-23 40 19 87
+	c105 482 427 927 850 1176 82 49 251 130 272 131 4 1 16 -28 27 -64z m1259 26
+	c203 -88 390 -220 557 -393 131 -136 223 -262 304 -418 87 -167 140 -314 177
+	-485 12 -57 12 -62 -12 -102 -34 -59 -109 -132 -194 -188 l-72 -48 -70 22
+	c-38 13 -114 45 -168 72 -346 173 -591 496 -676 889 -23 106 -26 361 -5 465
+	14 73 59 225 66 225 2 0 44 -17 93 -39z m-558 -1356 l0 -75 -135 0 -135 0 0
+	75 0 75 135 0 135 0 0 -75z m-1725 -341 c165 -105 380 -186 688 -258 26 -6 27
+	-8 27 -76 0 -39 -4 -70 -9 -70 -5 0 -61 13 -123 29 -419 109 -678 280 -743
+	491 -6 21 2 16 47 -27 30 -28 81 -68 113 -89z m2029 115 l26 -20 0 -425 c0
+	-411 -1 -425 -20 -444 -19 -19 -33 -20 -442 -20 -233 0 -428 4 -434 8 -32 21
+	-34 53 -34 462 l0 411 25 24 24 25 414 0 c404 0 415 -1 441 -21z m-1034 -444
+	l0 -135 -75 0 -75 0 0 135 0 135 75 0 75 0 0 -135z m1340 0 l0 -135 -75 0 -75
+	0 0 135 0 135 75 0 75 0 0 -135z m931 87 c-141 -175 -512 -337 -931 -407 -52
+	-8 -107 -18 -122 -21 -27 -5 -28 -4 -28 35 l0 41 140 0 140 0 0 25 c0 19 7 26
+	28 31 353 83 560 163 729 284 37 27 69 49 71 49 2 1 -11 -16 -27 -37z m-3298
+	-11 c144 -109 415 -216 702 -278 33 -7 41 -13 43 -36 l3 -27 140 0 139 0 0
+	-39 0 -38 -86 13 c-128 21 -265 52 -398 91 -65 19 -122 30 -126 26 -6 -6 -40
+	-100 -40 -109 0 -1 35 -14 78 -28 113 -37 305 -82 458 -107 74 -12 134 -26
+	134 -31 0 -4 16 -25 35 -47 56 -61 65 -62 565 -59 445 3 445 3 482 26 20 13
+	46 38 57 56 20 32 22 33 163 55 79 13 211 40 293 61 383 98 638 239 780 432
+	l42 57 19 -62 c13 -42 19 -91 19 -152 -2 -443 -568 -830 -1395 -956 -139 -22
+	-189 -24 -480 -24 -291 0 -341 2 -480 24 -728 111 -1244 415 -1376 811 -25 76
+	-25 215 0 298 l19 62 32 -47 c45 -66 148 -162 230 -216 73 -46 148 -87 163
+	-87 11 0 66 114 55 117 -33 11 -181 103 -226 141 -54 46 -115 112 -102 112 3
+	0 29 -18 58 -39z"/>
+	<path d="M400 1945 l0 -65 60 0 60 0 0 65 0 65 -60 0 -60 0 0 -65z"/>
+	<path d="M3490 1945 l0 -65 60 0 60 0 0 65 0 65 -60 0 -60 0 0 -65z"/>
+	<path d="M1883 1616 c-101 -33 -190 -113 -241 -216 -24 -50 -27 -66 -27 -165
+	0 -98 3 -116 27 -167 76 -162 258 -259 428 -228 317 58 444 435 224 670 -28
+	30 -73 63 -112 82 -58 29 -77 33 -161 35 -62 2 -111 -2 -138 -11z m232 -140
+	c56 -26 119 -90 142 -145 9 -20 16 -63 16 -96 2 -238 -288 -359 -455 -190 -50
+	51 -71 98 -76 173 -11 155 108 282 263 282 42 0 75 -7 110 -24z"/>
+	<path d="M1935 1386 c-158 -71 -105 -316 68 -316 104 0 173 74 165 176 -5 58
+	-25 93 -71 128 -33 25 -121 32 -162 12z"/>
+	</g>
+	</svg>
+	<h1 class="title">Foreman</h1>
+	<h3 class="subtitle">iOS Firmware Keystore</h3>
+	<h4 class="stats" id="statsLabel"></h4>
+</div>
+<div class="loadingKeys">
+	Reloading Keystore Data
+</div>
+<div class="availableKeys">
+</div>
+</body>
+<script type="text/javascript">
+	var loadingKeysDiv = document.getElementsByClassName("loadingKeys")[0]
+	var statsLabelObj = document.getElementById("statsLabel");
+	var titleContainerDiv = document.getElementsByClassName("titleContainer")[0]
+	var availableKeysDiv = document.getElementsByClassName("availableKeys")[0]
+	var cachedData = {}
+	var cachedAllFirmwaresList = null
+
+	function findiOSVersionStringForModelAndBuild(modelNumber, buildID) {
+		if (cachedAllFirmwaresList) {
+			let deviceDictionary = cachedAllFirmwaresList[modelNumber];
+			let deviceFirmwares = deviceDictionary['firmwares'];
+			for (var i = deviceFirmwares.length - 1; i >= 0; i--) {
+				if (deviceFirmwares[i]['buildid'] == buildID) {
+					return deviceFirmwares[i]['version'];
+				}
+			}
+		} else {
+			console.log("cachedAllFirmwaresList is empty")
+			return "";
+		}
+	}
+
+	function hideAll() {
+		var allContainers = document.getElementsByClassName("devicecontainer")
+		for (var i = allContainers.length - 1; i >= 0; i--) {
+			allContainers[i].style.display = "none";
+		}
+	}
+
+	function newKeyCell(cellData) {
+		console.log(cellData)
+		// create the cell
+		var newCell = document.createElement("div")
+		newCell.className += "keycell"
+		// create the device name and build number text
+		var newBuildAndModelText = document.createElement("p");
+		newBuildAndModelText.innerHTML = "<b>VER</b> <small>iOS "+findiOSVersionStringForModelAndBuild(cellData['device'], cellData['build'])+"</small> <b>BUILD</b> <small>"+cellData['build']+"</small>"
+		newCell.appendChild(newBuildAndModelText)
+		if (cellData['download']) {
+			var newIPSWDownloadLink = document.createElement("a");
+			newIPSWDownloadLink.href = cellData['download']
+			newIPSWDownloadLink.innerHTML = "Download IPSW"
+			newBuildAndModelText.appendChild(newIPSWDownloadLink)
+			
+			var newKeydataDownloadLink = document.createElement("a");
+			newKeydataDownloadLink.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cellData)));
+			newKeydataDownloadLink.setAttribute("download", cellData['device'].replace(',', '_')+'_'+cellData['build']+".json");
+			newKeydataDownloadLink.innerHTML = "Download Keys"
+			newBuildAndModelText.appendChild(newKeydataDownloadLink)
+		}
+		newCell.appendChild(document.createElement("hr")) // sep
+		// add each of the image keys to the cell
+		let imagesDictionary = cellData['images'];
+		let imagesDictionaryKeys = Object.keys(imagesDictionary)
+		for (i = imagesDictionaryKeys.length - 1; i >= 0; i--) {
+			let imageName = imagesDictionaryKeys[i].substring(imagesDictionaryKeys[i].lastIndexOf('/')+1);
+			let imageKey = cellData['images'][imagesDictionaryKeys[i]];
+			if (imageKey.length > 0 && imageName.length > 0) {
+				var newImageNameAndKeyText = document.createElement("p")
+				newImageNameAndKeyText.innerHTML = imageName+"<br>";
+				newImageNameAndKeyText.className += "keycellImageKey"
+				var keyText = document.createElement("code")
+				keyText.innerHTML = imageKey;
+				newImageNameAndKeyText.appendChild(keyText)
+				newCell.appendChild(newImageNameAndKeyText)
+			}
+		}
+		return newCell;
+	}
+
+	function loadData() {
+		$.getJSON("https://api.ipsw.me/v2.1/firmwares.json", function(allFirmwaresList) {
+			cachedAllFirmwaresList = allFirmwaresList['devices']
+			let allDeviceKeys = Object.keys(cachedAllFirmwaresList)
+			console.log(cachedAllFirmwaresList)
+			for (var i = allDeviceKeys.length - 1; i >= 0; i--) {
+				let deviceKey = allDeviceKeys[i];
+				console.log("adding "+deviceKey)
+				// add our device container and the containers keys
+				var newDeviceContainerOpenButton = document.createElement("button")
+				newDeviceContainerOpenButton.className += "collapsible";
+				newDeviceContainerOpenButton.innerHTML = cachedAllFirmwaresList[deviceKey]['name']+"<br>Identifier: "+deviceKey+" &#9830; Platform: "+cachedAllFirmwaresList[deviceKey]['platform']+"<br>BoardConfig: "+cachedAllFirmwaresList[deviceKey]['BoardConfig']+" &#9830; CPID: "+cachedAllFirmwaresList[deviceKey]['cpid'];
+				newDeviceContainerOpenButton.style.display = "none";
+				newDeviceContainerOpenButton.id = "button_"+deviceKey;
+				newDeviceContainerOpenButton.addEventListener("click", function() {
+					this.classList.toggle("active");
+					var content = this.nextElementSibling;
+					if (content.style.display === "block") {
+						content.style.display = "none";
+					} else {
+						hideAll()
+						content.style.display = "block";
+					}
+				});
+				var newDeviceContainer = document.createElement("div");
+				newDeviceContainer.className += "devicecontainer"
+				newDeviceContainer.id = deviceKey;
+				availableKeysDiv.appendChild(newDeviceContainerOpenButton);
+				availableKeysDiv.appendChild(newDeviceContainer);
+			}
+			
+			$.getJSON("api/find/all", function(keysData) {
+				keysData.sort(function(a, b) {
+					if(a.build < b.build) { return -1; }
+					if(a.build > b.build) { return 1; }
+					return 0;
+				});
+				keysData.reverse()
+				// breakdown our data a bit and add the select objects
+				var availableKeysCount = 0;
+				var availableKeysetsCount = 0;
+				var availableDeviceCount = 0;
+				for (var i = keysData.length - 1; i >= 0; i--) {
+					var deviceArray = cachedData[keysData[i]['device']];
+					if (deviceArray == undefined) {
+						availableDeviceCount += 1;
+						cachedData[keysData[i]['device']] = [];
+					}
+					cachedData[keysData[i]['device']].push(keysData[i]);
+					availableKeysCount += Object.keys(keysData[i]['images']).length
+					availableKeysetsCount += 1
+				}
+				statsLabelObj.innerHTML = availableKeysetsCount+" available firmware keysets for "+availableDeviceCount+" devices, "+(availableKeysCount)+" total keys."
+				let cachedDataKeys = Object.keys(cachedData)
+				if (cachedDataKeys.length > 0) {
+					for (var i = cachedDataKeys.length - 1; i >= 0; i--) {
+						var lastBuildPrefix = ''
+						for (var q = cachedData[cachedDataKeys[i]].length - 1; q >= 0; q--) {
+							var findID = "button_"+(cachedDataKeys[i])
+							console.log(findID)
+							if (document.getElementById(findID)) {
+								document.getElementById(findID).style.display = "block";
+							}
+
+							findID = (cachedDataKeys[i])
+							console.log(findID)
+							let currentBuildPrefix = cachedData[cachedDataKeys[i]][q]['build'].substring(0,2)
+							if (currentBuildPrefix != lastBuildPrefix) {
+								var iosVersionTitle = document.createElement("h1")
+								iosVersionTitle.innerHTML = 'iOS '+findiOSVersionStringForModelAndBuild(cachedData[cachedDataKeys[i]][q]['device'], cachedData[cachedDataKeys[i]][q]['build']).split('.')[0]
+								iosVersionTitle.style.fontWeight = "bold";
+								iosVersionTitle.style.fontSize = "50px";
+								iosVersionTitle.style.marginTop = "10px"
+								iosVersionTitle.style.marginBottom = "0px"
+								iosVersionTitle.style.marginLeft = "0px"
+								iosVersionTitle.style.marginRight = "0px"
+								document.getElementById(findID).appendChild(iosVersionTitle)
+								document.getElementById(findID).appendChild(document.createElement('hr'))
+								lastBuildPrefix = currentBuildPrefix
+							}
+							if (document.getElementById(findID)) {
+								document.getElementById(findID).appendChild(newKeyCell(cachedData[cachedDataKeys[i]][q]))
+								console.log("appendChild()")
+							}
+						}
+					}
+				}
+			});
+			loadingKeysDiv.style.display = "none";
+		});
+	}
+</script>
+</html>

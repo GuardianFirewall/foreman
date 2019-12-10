@@ -1,0 +1,25 @@
+{
+  "name": "foreman",
+  "version": "1.0.0",
+  "description": "Keystore server for grandmaster",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dylan Haifisch Laws",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "@pm2/io": "^4.3.2",
+    "basic-auth": "^2.0.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-useragent": "^1.0.13",
+    "mongodb": "^3.3.3",
+    "nodejs-websocket": "^1.7.2",
+    "shasum": "^1.0.2",
+    "socket.io": "^2.3.0",
+    "tsscmp": "^1.0.6",
+    "uuid": "^3.3.3"
+  }
+}
