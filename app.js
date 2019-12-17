@@ -75,20 +75,12 @@ function connectToMongo(callback) {
 	})
 }
 
-function mongo_generalCleanConfigForUser(configData, cleanKey) {
+function mongo_generalCleanConfigForUser(configData) {
 	var cleanedConfigData = configData
 	var cleanedImagesDictionary = {}
 	if (cleanedConfigData['_id'] != undefined) {
 		delete cleanedConfigData['_id'];
 	}
-	let dirtyImagesDictionary = cleanedConfigData[cleanKey]
-	let dirtyImagesKeys = Object.keys(dirtyImagesDictionary)
-	for (var i = dirtyImagesKeys.length - 1; i >= 0; i--) {
-		var cleanKey = dirtyImagesKeys[i].replace(/\_/g,'.')
-		cleanKey = cleanKey.replace('all.flash', 'all_flash')
-		cleanedImagesDictionary[cleanKey] = dirtyImagesDictionary[dirtyImagesKeys[i]]
-	}
-	cleanedConfigData[cleanKey] = cleanedImagesDictionary
 	return cleanedConfigData
 }
 
@@ -204,8 +196,8 @@ function mongo_getAllKeybags(callback) {
 				availableFirmwares.set(items.length)
 				var cleanedItems = [];
 				for (var i = items.length - 1; i >= 0; i--) {
-					var cleaned = mongo_generalCleanConfigForUser(items[i], 'kbags');
-					cleaned = mongo_generalCleanConfigForUser(items[i], 'images')
+					var cleaned = mongo_generalCleanConfigForUser(items[i]);
+					cleaned = mongo_generalCleanConfigForUser(items[i])
 					cleanedItems.push(cleaned)
 				}
 				callback(err, cleanedItems)
@@ -237,7 +229,7 @@ function mongo_getAllConfigsKeystore(callback) {
 				availableFirmwares.set(items.length)
 				var cleanedItems = [];
 				for (var i = items.length - 1; i >= 0; i--) {
-					cleanedItems.push(mongo_generalCleanConfigForUser(items[i], 'images'))
+					cleanedItems.push(mongo_generalCleanConfigForUser(items[i]))
 				}
 				callback(err, cleanedItems)
 			}
