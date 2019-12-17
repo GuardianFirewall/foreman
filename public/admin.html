@@ -28,47 +28,74 @@
 		<a class="navbar-brand" href="#">Foreman Admin</a>
 	</nav>
 	<hr>
-	<div class="row">
-		<div class="col-sm-4">
-			<h3>Superusers</h3>
-			<div class="form-group">
-				<label for="inputNewSuperuserUsername">Username</label>
-				<input type="text" class="form-control" id="inputNewSuperuserUsername" placeholder="notroot">
+	<div id="accordion">
+		<!-- keystore stats card -->
+		<div class="card bg-dark text-white" style="width:1000px">
+			<div class="card-header" id="headingKeystoreStats">
+				<h5 class="mb-0">
+					<button class="btn text-white" data-toggle="collapse" data-target="#collapseKeystoreStats" aria-expanded="true" aria-controls="collapseKeystoreStats">Keystore Stats</button>
+				</h5>
 			</div>
-			<div class="form-group">
-				<label for="inputNewSuperuserPassword">Password</label>
-				<input type="password" class="form-control" id="inputNewSuperuserPassword" placeholder="Password">
+			<div id="collapseKeystoreStats" class="collapse show" aria-labelledby="headingKeystoreStats" data-parent="#accordion">
+				<div class="card-body">
+					<h3>Keystore Stats</h3>
+					<table class="table table-bordered table-dark">
+						<tbody id="keystoreInformation">
+						</tbody>
+					</table>
+				</div>
 			</div>
-			<label class="checkbox">
-				<input type="checkbox" name="confirmNewSuperuser" id="confirmNewSuperuser" onchange="allowNoAuthChanged()" />
-				<span>Confirm Adding Superuser</span>
-			</label>
-			<br>
-			<button type="submit" class="btn btn-primary" onclick="askToAddNewUser()">Add Superuser</button>
-			<br>
-			<br>
-			<table class="table table-bordered table-dark">
-				<tbody id="superusersTable">
-				</tbody>
-			</table>
-			<!--<button class="btn btn-danger" onclick="askToRemoveSuperuser()">Remove</button>-->
 		</div>
-		<div class="col-sm-4">
-			<h3>API Keys</h3>
-			<table class="table table-bordered table-dark" id='apiKeyTable'>
-				<tbody id="authorizedKeysCol">
-				
-				</tbody>
-			</table>
-			<button class="btn btn-primary" onclick="askForNewKey()">Generate</button> 
-			<button class="btn btn-danger" onclick="askToRemoveKey()">Remove Key</button>
+		<!-- manage superuser card -->
+		<div class="card bg-dark text-white" style="width:1000px">
+			<div class="card-header" id="headingSuperusers">
+				<h5 class="mb-0">
+					<button class="btn text-white" data-toggle="collapse" data-target="#collapseSuperusers" aria-expanded="true" aria-controls="collapseSuperusers">Manage Superusers</button>
+				</h5>
+			</div>
+			<div id="collapseSuperusers" class="collapse show" aria-labelledby="headingSuperusers" data-parent="#accordion">
+				<div class="card-body">
+					<div class="form-group">
+						<label for="inputNewSuperuserUsername">Username</label>
+						<input type="text" class="form-control" id="inputNewSuperuserUsername" placeholder="notroot">
+					</div>
+					<div class="form-group">
+						<label for="inputNewSuperuserPassword">Password</label>
+						<input type="password" class="form-control" id="inputNewSuperuserPassword" placeholder="Password">
+					</div>
+					<label class="checkbox">
+						<input type="checkbox" name="confirmNewSuperuser" id="confirmNewSuperuser" onchange="allowNoAuthChanged()" />
+						<span>Confirm Adding Superuser</span>
+					</label>
+					<br>
+					<button type="submit" class="btn btn-primary" onclick="askToAddNewUser()">Add Superuser</button>
+					<br>
+					<br>
+					<table class="table table-bordered table-dark">
+						<tbody id="superusersTable">
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
-		<div class="col-sm-4">
-			<h3>Keystore Stats</h3>
-			<table class="table table-bordered table-dark">
-				<tbody id="keystoreInformation">
-				</tbody>
-			</table>
+		<!-- manage api tokens card -->
+		<div class="card bg-dark text-white" style="width:1000px">
+			<div class="card-header" id="headingTokens">
+				<h5 class="mb-0">
+					<button class="btn text-white" data-toggle="collapse" data-target="#collapseTokens" aria-expanded="true" aria-controls="collapseTokens">Manage API Tokens</button>
+				</h5>
+			</div>
+			<div id="collapseTokens" class="collapse show" aria-labelledby="headingTokens" data-parent="#accordion">
+				<div class="card-body">
+					<table class="table table-bordered table-dark" id='apiKeyTable'>
+						<tbody id="authorizedKeysCol">
+						
+						</tbody>
+					</table>
+					<button class="btn btn-primary" onclick="askForNewKey()">Generate</button> 
+					<button class="btn btn-danger" onclick="askToRemoveKey()">Remove Token</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
