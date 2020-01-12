@@ -278,7 +278,7 @@
 				// add our device container and the containers keys
 				var newDeviceContainerOpenButton = document.createElement("button")
 				newDeviceContainerOpenButton.className += "collapsible";
-				newDeviceContainerOpenButton.innerHTML = cachedAllFirmwaresList[deviceKey]['name']+"<br>Identifier: "+deviceKey+" &#9830; Platform: "+cachedAllFirmwaresList[deviceKey]['platform']+"<br>BoardConfig: "+cachedAllFirmwaresList[deviceKey]['BoardConfig']+" &#9830; CPID: "+cachedAllFirmwaresList[deviceKey]['cpid'];
+				newDeviceContainerOpenButton.innerHTML = cachedAllFirmwaresList[deviceKey]['name']+"<br>Identifier: "+deviceKey+" &#9830; Platform: "+cachedAllFirmwaresList[deviceKey]['platform']+"<br>BoardConfig: "+cachedAllFirmwaresList[deviceKey]['BoardConfig']+" &#9830; CPID: "+cachedAllFirmwaresList[deviceKey]['cpid'].toString(16);
 				newDeviceContainerOpenButton.style.display = "none";
 				newDeviceContainerOpenButton.id = "button_"+deviceKey;
 				newDeviceContainerOpenButton.addEventListener("click", function() {
